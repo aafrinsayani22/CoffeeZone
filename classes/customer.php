@@ -226,9 +226,6 @@ class customer {
             $this->setAvatar($avatar);
         }
         
-        
-        
-        
     }
 
     public function load($customer_id) {
@@ -263,8 +260,9 @@ class customer {
 
         if (($this->firstname != "")&& ($this->lastname != "") && ($this->address != "") && ($this->city != "")
                 && ($this->postal_code != "")&& ($this->province != "") && ($this->username != "")&& ($this->password != "")&& ($this->avatar != "")) {
-            //$sql = "INSERT INTO employees WHERE (firstname,lastname,address,city,postal_code,province,username,password) VALUES (:firstname,:lastname,:address,:city,:province,:postal_code,:username,:avatar)";
+            
             $sql = "call customer_insert(:firstname, :lastname, :address, :city, :province, :postal_code, :province, :username, :password, :avatar)";
+            
             $PDOobject = $connection->prepare($sql);
             $PDOobject->bindParam(':firstname', $this->firstname);
             $PDOobject->bindParam(':lastname', $this->lastname);
@@ -281,8 +279,7 @@ class customer {
         else
         {
            $sql =  "call customer_update(:customer_id,:firstname, :lastname, :address, :city, :province, :postal_code, :province, :username, :password, :avatar)";
-//            $sql = "UPDATE employees set firstname = :firstname"
-//                    . "WHERE employee_id = :employee_id";
+
 
             $PDOobject = $connection->prepare($sql);
             $PDOobject->bindParam(':firstname', $this->firstname);
@@ -298,17 +295,7 @@ class customer {
             
             return true;
         }
-//        if ($this->employee_id != "") {
-//            
-//            $sql = "DELETE FROM emoployees WHERE employee_id = :employee_id";
-//            
-////            $sql = "INSERT INTO employees WHERE (firstname) VALUES (:firstname)";
-//
-//            $PDOobject = $connection->prepare($sql);
-//            $PDOobject->bindParam(':employee_id', $this->employee_id);
-//            $PDOobject->execute();
-//            return true;
-//        }
+
 
     }
     
@@ -316,15 +303,12 @@ class customer {
 
         global $connection;
 
-
-        if ($this->employee_id != "") {
+        if ($this->customer_id != "") {
             
-            $sql = "DELETE FROM emoployees WHERE employee_id = :employee_id";
-            
-//            $sql = "INSERT INTO employees WHERE (firstname) VALUES (:firstname)";
+            $sql = "call customer_delete(:customer_id)";
 
             $PDOobject = $connection->prepare($sql);
-            $PDOobject->bindParam(':employee_id', $this->employee_id);
+            $PDOobject->bindParam(':customer_id', $this->customer_id);
             $PDOobject->execute();
             return true;
         }
