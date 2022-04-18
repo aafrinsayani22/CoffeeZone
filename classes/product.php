@@ -7,13 +7,14 @@
 
 require_once('connection.php'); #connection = new PDo
 
-class customer {
+class product {
 
     const PRODUCT_ID_MAX_LENGTH = 12;
     const PRODUCT_CODE_MAX_LENGTH = 12;
     const DESCRIPTION_MAX_LENGTH = 100;
-    const PRICE_MAX = 10000;
-    const COST_PRICE_MAX_LENGTH = 10000;
+    const PRICE_MAX_LENGTH = 1000;
+    const COST_PRICE_MAX = 200;
+
 
 
     private $product_id = "";
@@ -21,12 +22,9 @@ class customer {
     private $description = "";
     private $price = "";
     private $cost_price = "";
+
  
     
-    public function getProduct_code() {
-        return $this->product_code;
-    }
-
     public function getDescription() {
         return $this->description;
     }
@@ -34,34 +32,22 @@ class customer {
     public function getPrice() {
         return $this->price;
     }
-    
-    public function getCostPrice() {
+
+    public function getCost_price() {
         return $this->cost_price;
     }
 
+
    
 
-    public function setProduct_code($newProductcode) {
-
-        if (mb_strlen($newProductcode) == 0) {
-            return "The product code is empty.";
-        }
-        if (mb_strlen($newProductcode) > self::PRODUCT_CODE_MAX_LENGTH) {
-            return "The product code must be less than 20.";
-        }
-        else {
-            $this->product_code = $newProductcode;
-        }
-    }
-    
     public function setDescription($newDescription) {
 
         if (mb_strlen($newDescription) == 0) {
-            return "The newDescription is empty.";
-        } 
+            return "The product code is empty.";
+        }
         if (mb_strlen($newDescription) > self::DESCRIPTION_MAX_LENGTH) {
-            return "The newDescription must be less than 20 char";
-        } 
+            return "The product code must be less than 20.";
+        }
         else {
             $this->description = $newDescription;
         }
@@ -70,39 +56,31 @@ class customer {
     public function setPrice($newPrice) {
 
         if (mb_strlen($newPrice) == 0) {
-            return "The price is empty. ";
-        }
-        if (mb_strlen($newPrice) > self::PRICE_MAX) {
-            return "The price must be less than 25";
-        }
+            return "The newDescription is empty.";
+        } 
+        if (mb_strlen($newPrice) > self::PRICE_MAX_LENGTH) {
+            return "The newDescription must be less than 20 char";
+        } 
         else {
             $this->price = $newPrice;
         }
     }
     
-    public function setCost_price($newCostprice) {
+    public function setCost_price($newCost_price) {
 
-        if (mb_strlen($newCostprice) == 0) {
-            return "The cost price is empty";
+        if (mb_strlen($newCost_price) == 0) {
+            return "The price is empty. ";
         }
-        
-        if (mb_strlen($newCostprice) > self::COST_PRICE_MAX_LENGTH) {
-            return "The cost price must be less than 25 ";
+        if (mb_strlen($newCost_price) > self::COST_PRICE_MAX) {
+            return "The price must be less than 25";
         }
         else {
-            $this->cost_price = $newCostprice;
+            $this->cost_price = $newCost_price;
         }
     }
-
     
+    public function _construct( $description, $price, $cost_price) {
  
-
-    public function _construct( $product_code, $description, $price, $cost_price) {
- 
-        
-        if ($product_code != "") {
-            $this->product_code($product_code);
-        }
         
         if ($description != "") {
             $this->description($description);
@@ -111,11 +89,10 @@ class customer {
         if ($price != "") {
             $this->price($price);
         }
-        
         if ($cost_price != "") {
             $this->cost_price($cost_price);
         }
-        
+ 
     }
 
     public function load($product_code) {
@@ -124,15 +101,14 @@ class customer {
         $sql = "CALL product_select(:product_code)";
 
         $PDOobject = $connection->prepare($sql);
-        $PDOobject->bindParam(':producyt_code', $product_code);
+        $PDOobject->bindParam(':product_code', $product_code);
         $PDOobject->execute();
 
         if ($row = $PDOobject->fetch(PDO::FETCH_ASSOC)) {
-            $this->product_code = $row["prod_code"];
             $this->description = $row["description"];
             $this->price = $row["price"];
             $this->cost_price = $row["cost_price"];
-
+       
             return true;
         }
     }
@@ -141,7 +117,7 @@ class customer {
 
         global $connection;
 
-        if (($this->product_code != "")&& ($this->description != "") && ($this->price != "") && ($this->cost_price != ""))
+        if (($this->description != "")&& ($this->price != "") && ($this->cost_price != ""))
         {
             $sql = "call product_insert(:product_code, :description, :price, :cost_price)";
         
