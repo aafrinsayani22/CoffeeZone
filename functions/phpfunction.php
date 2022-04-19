@@ -15,6 +15,7 @@
 
 // Defining Constant variables for later use.
 define("FILE_INDEX", "./index.php");
+
 define("FILE_BUYING", "./buying.php");
 define("FILE_MYORDERS", "./myOrders.php");
 define("JSON_TEXT_FILE", "JSON.txt");
@@ -23,6 +24,22 @@ define("LOGO_IMAGE", FOLDER_IMAGES . "logo5.png");
 define("FOLDER_CSS", "CSS/");
 define("FILE_CSS", FOLDER_CSS . "style.css");
 define("PRINT_CSS", FOLDER_CSS . "print.css");
+require_once './connection.php';
+//Defining login page
+function Login()
+{
+ ?>
+    <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+        <label for="username">Username :</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password :</label>
+        <input type="text" name="password" id="password">
+        <br><br>
+        <input type="submit" name="login" value="Login">
+    </form>
+<?php
+}
+
 
 // Defining Top page function for using it multiple times and Defining HTML only once.
 function PageTop($pageTitle)
