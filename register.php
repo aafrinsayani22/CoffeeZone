@@ -12,7 +12,7 @@ include_once('functions/phpfunction.php');
 
 
 // Page Structure
-noCache();
+
 
 // Navigation Bar function call
 navigationMenu();
@@ -73,7 +73,10 @@ if(isset($_POST["signup"])){
     }
     else if(empty(trim($_POST["username"]))){
         $username_err = $customer->setUsername($username);
-    }  // if all the fields are not empty and setted,  prepare to manipulate data with sql
+    } 
+    else if(empty(trim($password))){
+        $password_err = $customer->setPassword($password);  
+    }// if all the fields are not empty and setted,  prepare to manipulate data with sql
     else{
         
         // Prepare a select statement with username provided to check if the username already exists.
@@ -93,7 +96,13 @@ if(isset($_POST["signup"])){
                     $username_err = "This username is already taken.";
                 } else{
                     // Store the value into customer object of the given username.
+                    $customer->setFirstname(trim($firstname));
+                    $customer->setLastname(trim($lastname));
+                    $customer->setAddress(trim($address));
+                    $customer->setCity(trim($city));
+                    $customer->setPostal_code(trim($postal_code));
                     $customer->setUsername(trim($username));
+                    $customer->setPassword(trim($password));
                
                 }
             } else{
@@ -105,38 +114,35 @@ if(isset($_POST["signup"])){
         }
     }
     
-    // Validate password
-    // Check if password is empty
-    if(empty(trim($password))){
-        $password_err = $customer->setPassword($password);  
-    } 
-    else{
-        // Store the value of the password into the object
-        $customer->setPassword(trim($password));
 
-    }
     
     // Check if error strings are empty before inserting in database
     if(empty($username_err) && empty($password_err)&&empty($firstname_err) && empty($lastname_err) && empty($address_err)&&empty($city_err) && empty($postal_code_err)){
         
         // Prepare sql query
-        $sql = "INSERT INTO customers (firstname,lastname,address,city,postal_code,username, password) VALUES (:firstname,:lastname,:address,:city,:postal_code,:username,:password)";
+        //$sql = "INSERT INTO customers (firstname,lastname,address,city,postal_code,username, password) VALUES (:firstname,:lastname,:address,:city,:postal_code,:username,:password)";
         // 
-        //$sql = "CALL customer_insert(:firstname, :lastname, :address, :city, :postal_code, :username, :password)";
+        $sql = "CALL customer_insert(:firstname, :lastname, :address, :city, :postal_code, :username, :password)";
          
         if($PDOobject = $connection->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $PDOobject->bindParam(":firstname", $firstname, PDO::PARAM_STR);
-            $PDOobject->bindParam(":lastname", $lastname, PDO::PARAM_STR);
-            $PDOobject->bindParam(":address", $address, PDO::PARAM_STR);
-            $PDOobject->bindParam(":city", $city, PDO::PARAM_STR);
-            $PDOobject->bindParam(":postal_code", $postal_code, PDO::PARAM_STR);
-            $PDOobject->bindParam(":username",$username , PDO::PARAM_STR);
+            $PDOobject->bindParam(":firstname", $p_firstname, PDO::PARAM_STR);
+            $PDOobject->bindParam(":lastname", $p_lastname, PDO::PARAM_STR);
+            $PDOobject->bindParam(":address", $p_address, PDO::PARAM_STR);
+            $PDOobject->bindParam(":city", $p_city, PDO::PARAM_STR);
+            $PDOobject->bindParam(":postal_code", $p_postal_code, PDO::PARAM_STR);
+            $PDOobject->bindParam(":username",$p_username , PDO::PARAM_STR);
             $PDOobject->bindParam(":password", $p_password, PDO::PARAM_STR);
             
             // Set parameters
-
-            $p_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+           
+            $p_firstname = $customer->getFirstname();
+            $p_lastname = $customer->getLastname();
+            $p_address = $customer->getAddress();
+            $p_city = $customer->getCity();
+            $p_postal_code = $customer->getPostal_code();
+            $p_username = $customer->getUsername();
+            $p_password = password_hash($customer->getPassword(), PASSWORD_DEFAULT); // Creates a password hash
             
             // Attempt to execute the prepared statement
             if($PDOobject->execute()){
@@ -161,11 +167,7 @@ if(isset($_POST["signup"])){
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 360px; padding: 20px; }
-    </style>
+    
 </head>
 <body>
     
@@ -200,47 +202,53 @@ if(isset($_POST["signup"])){
               <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
+                
                 <label>Firstname</label>
-                <input type="text" name="firstname" class="form-control <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $firstname; ?>">
-                <span class="invalid-feedback"><?php echo $firstname_err; ?></span>
-            </div>  
+                <span class="error">*  <?php echo $firstname_err ?></span>
+                <input type="text" name="firstname"  value="<?php echo $firstname; ?>">
+                <br><br>
+             
             
-            <div class="form-group">
+               
                 <label>Lastname</label>
-                <input type="text" name="lastname" class="form-control <?php echo (!empty($lastname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $lastname; ?>">
-                <span class="invalid-feedback"><?php echo $lastname_err; ?></span>
-            </div>  
-            <div class="form-group">
+                 <span class="error">*  <?php echo $lastname_err ?></span>
+                <input type="text" name="lastname"  value="<?php echo $lastname; ?>">
+                <br><br>
+              
+                
                 <label>Address</label>
-                <input type="text" name="address" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $address; ?>">
-                <span class="invalid-feedback"><?php echo $address_err; ?></span>
-            </div>  
-            <div class="form-group">
+                <span class="error">*  <?php echo $address_err ?></span>
+                <input type="text" name="address"  value="<?php echo $address; ?>">
+                <br><br>
+            
+                
                 <label>City</label>
-                <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>">
-                <span class="invalid-feedback"><?php echo $city_err; ?></span>
-            </div>  
-            <div class="form-group">
+                <span class="error">*  <?php echo $city_err ?></span>
+                <input type="text" name="city"  value="<?php echo $city; ?>">
+                <br><br>
+              
+                
                 <label>Postal code</label>
-                <input type="text" name="postal_code" class="form-control <?php echo (!empty($postal_code_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $postal_code; ?>">
-                <span class="invalid-feedback"><?php echo $postal_code_err; ?></span>
-            </div>  
-            <div class="form-group">
+                <span class="error">*  <?php echo $postal_code_err ?></span>
+                <input type="text" name="postal_code"  value="<?php echo $postal_code; ?>">
+                <br><br>
+              
+                
                 <label>Username</label>
-                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
-                <span class="invalid-feedback"><?php echo $username_err; ?></span>
-            </div>  
+                <span class="error">*  <?php echo $username_err ?></span>
+                <input type="text" name="username"  value="<?php echo $username; ?>">
+                <br><br>
 
-            <div class="form-group">
+                
                 <label>Password</label>
-                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
-                <span class="invalid-feedback"><?php echo $password_err; ?></span>
-            </div>
+                <span class="error">*  <?php echo $password_err ?></span>
+                <input type="password" name="password"  value="<?php echo $password; ?>">
+                <br><br>
+            
    
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit" name="signup">
-                <input type="reset" class="btn btn-secondary ml-2" value="Reset">
+            <div class="">
+                <input type="submit" style="background-color: #1d5962; margin-bottom: 2px;" value="Submit" name="signup">
+  
             </div>
             <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
