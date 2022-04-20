@@ -1,59 +1,99 @@
 <?php
+session_start();
+
+
 // Include config file
 require_once "config.php";
 
-require_once 'customer.php';
+require_once "customer.php";
+// Including common functionce file
+include_once('functions/phpfunction.php');
+// Navigation Bar function call
 
- 
+
+// Page Structure
+noCache();
+
+// Navigation Bar function call
+navigationMenu();
+
+// Top Page function call
+PageTop("Buy Page");
+
+
+?>
+
+<?php
+
+
+
+
+
+
+
+ // Check if the user is logged in, if not then redirect him to login page
+//if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+//    header("location: login.php");
+//    exit;
+//}
 // Define variables and initialize with empty values
-$firstname = $lastname = $address = $city = $postal_code  = "";
-$username = $password = "";
+
+$username = $password = $firstname = $lastname = $address = $city = $postal_code = "";
 $firstname_err = $lastname_err = $address_err = $city_err = $postal_code_err  = "";
 $username_err = $password_err  = "";
  
 // Processing form data when form is submitted
 if(isset($_POST["signup"])){ 
- 
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
+    $address = $_POST["address"];
+    $city = $_POST["city"];
+    $postal_code = $_POST["postal_code"];
+    $username = $_POST["username"];
+    $password = $_POST["password"];
     // Validate input fields
     
     // Create customer objct
     $customer = new customer();
     //check if the user name  exists in the database or not
     if(empty(trim($_POST["firstname"]))){
-        $firstname_err = $customer->setFirstname($_POST["firstname"]);
+        $firstname_err = $customer->setFirstname($firstname);
     } 
     else if(empty(trim($_POST["lastname"]))){
-        $lastname_err = $customer->setLastname($_POST["lastname"]);
+        $lastname_err = $customer->setLastname($lastname);
     }
     else if(empty(trim($_POST["address"]))){
-        $address_err = $customer->setAddress($_POST["address"]);
+        $address_err = $customer->setAddress($address);
     }
     else if(empty(trim($_POST["city"]))){
-        $city_err = $customer->setCity($_POST["city"]);
+        $city_err = $customer->setCity($city);
     }
     else if(empty(trim($_POST["postal_code"]))){
-        $postal_code_err = $customer->setPostal_code($_POST["postal_code"]);
+        $postal_code_err = $customer->setPostal_code($postal_code);
     }
     else if(empty(trim($_POST["username"]))){
-        $username_err = $customer->setUsername($_POST["username"]);
+        $username_err = $customer->setUsername($username);
     }  // if all the fields are not empty and setted,  prepare to manipulate data with sql
     else{
-        // Prepare a select statement with username provided to check if the username already exists.
-        $sql = "SELECT id FROM users WHERE username = :username";
         
+        // Prepare a select statement with username provided to check if the username already exists.
+        $sql = "SELECT * FROM customers WHERE username = :username";
+      
         if($PDOobject = $connection->prepare($sql)){
+            
             // Bind variables to the prepared statement as parameters
               $PDOobject->bindParam(":username", $p_username, PDO::PARAM_STR);
+              
             // Set parameters
-            $p_username = $customer->getUsername();
-            
+            $p_username = $username;
+
             // Eexecute the prepared statement
             if($PDOobject->execute()){
                 if($PDOobject->rowCount() == 1){
                     $username_err = "This username is already taken.";
                 } else{
                     // Store the value into customer object of the given username.
-                    $customer->setUsername(trim($_POST["username"]));
+                    $customer->setUsername(trim($username));
                
                 }
             } else{
@@ -67,55 +107,40 @@ if(isset($_POST["signup"])){
     
     // Validate password
     // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-        $password_err = $customer->setPassword($_POST["password"]);  
+    if(empty(trim($password))){
+        $password_err = $customer->setPassword($password);  
     } 
     else{
         // Store the value of the password into the object
-        $customer->setPassword(trim($_POST["password"]));
+        $customer->setPassword(trim($password));
 
     }
-    
-    // Validate confirm password
-    // Double check the password
-//    if(empty(trim($_POST["confirm_password"]))){ // Check if its empty
-//        $confirm_password_err = "Please confirm password.";     
-//    } else{
-//        
-//        if(empty($password_err) && empty($password != $confirm_password)){
-//            $confirm_password_err = "Password did not match.";
-//        }
-//        $confirm_password = trim($_POST["confirm_password"]); 
-//    }
     
     // Check if error strings are empty before inserting in database
     if(empty($username_err) && empty($password_err)&&empty($firstname_err) && empty($lastname_err) && empty($address_err)&&empty($city_err) && empty($postal_code_err)){
         
         // Prepare sql query
-        $sql = "CALL customer_insert(:firstname, :lastname, :address, :city, :postal_code, :username, :password)";
+        $sql = "INSERT INTO customers (firstname,lastname,address,city,postal_code,username, password) VALUES (:firstname,:lastname,:address,:city,:postal_code,:username,:password)";
+        // 
+        //$sql = "CALL customer_insert(:firstname, :lastname, :address, :city, :postal_code, :username, :password)";
          
         if($PDOobject = $connection->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $PDOobject->bindParam(":firstname", $p_firstname, PDO::PARAM_STR);
-            $PDOobject->bindParam(":lastname", $p_lastname, PDO::PARAM_STR);
-            $PDOobject->bindParam(":address", $p_address, PDO::PARAM_STR);
-            $PDOobject->bindParam(":city", $p_city, PDO::PARAM_STR);
-            $PDOobject->bindParam(":postal_code", $p_postal_code, PDO::PARAM_STR);
-            $PDOobject->bindParam(":username",$p_username , PDO::PARAM_STR);
+            $PDOobject->bindParam(":firstname", $firstname, PDO::PARAM_STR);
+            $PDOobject->bindParam(":lastname", $lastname, PDO::PARAM_STR);
+            $PDOobject->bindParam(":address", $address, PDO::PARAM_STR);
+            $PDOobject->bindParam(":city", $city, PDO::PARAM_STR);
+            $PDOobject->bindParam(":postal_code", $postal_code, PDO::PARAM_STR);
+            $PDOobject->bindParam(":username",$username , PDO::PARAM_STR);
             $PDOobject->bindParam(":password", $p_password, PDO::PARAM_STR);
             
             // Set parameters
-            $p_firstname = $customer->getFirstname();
-            $p_lastname = $customer->getLastname();
-            $p_address =  $customer->getAddress();
-            $p_city = $customer->getCity();
-            $p_postal_code = $customer->getPostal_code();
-            $p_username = $customer->getUsername();
-            $p_password = password_hash($customer->getPassword(), PASSWORD_DEFAULT); // Creates a password hash
+
+            $p_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
             // Attempt to execute the prepared statement
             if($PDOobject->execute()){
-                // Redirect to login page
+                //Redirect to login page
                 header("location: login.php");
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -143,10 +168,38 @@ if(isset($_POST["signup"])){
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <h2>Sign Up</h2>
+    
+    <section class="section-how" id="how">
+        <div class="container">
+          <h2 class="heading-primary" style="margin-bottom: 2.5rem">
+            Welcome Folk
+          </h2>
+          <h1 class="heading-secondary">Please Create New account with your personal account information.
+
+
+</h1>
+        </div>
+
+        <div class="container grid grid--2-cols-reg grid--center-v">
+          <!-- STEP 02 -->
+          <div class="step-img-box">
+            <embed src="./undraw_profile-register.svg" />
+          </div>
+
+
+          <div class="step-text-box">
+                      <div class="form" style="
+                      /*box-sizing: border-box;*/
+                      font-size: large;
+                      padding: 5px;
+                      color: #fff;
+                  ">
+
+          <div class="Container-form" style="background-color: #39b2c4;">
+          <p><span class="error" style="color: red; ">* Required field</span></p>
+              <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
-        <form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
                 <label>Firstname</label>
                 <input type="text" name="firstname" class="form-control <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $firstname; ?>">
@@ -191,6 +244,14 @@ if(isset($_POST["signup"])){
             </div>
             <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
-    </div>    
+              </div>
+          </div>
+          </div>
+
+
+        </div>
+      </section>
+
+
 </body>
 </html>

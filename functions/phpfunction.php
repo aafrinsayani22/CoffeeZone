@@ -24,7 +24,7 @@ define("LOGO_IMAGE", FOLDER_IMAGES . "logo5.png");
 define("FOLDER_CSS", "CSS/");
 define("FILE_CSS", FOLDER_CSS . "style.css");
 define("PRINT_CSS", FOLDER_CSS . "print.css");
-require_once './connection.php';
+
 //Defining login page
 function Login()
 {
