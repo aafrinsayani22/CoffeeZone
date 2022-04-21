@@ -65,7 +65,7 @@ PageTop("Buy Page");
                     require_once "config.php";
                     
                     // Attempt select query execution
-                    $sql = "SELECT * FROM customers";
+                    $sql = "SELECT * FROM products";
                     if($result = $connection->query($sql)){
                         if($result->rowCount() > 0){
                             
@@ -80,6 +80,8 @@ PageTop("Buy Page");
                                 }
                                 echo "</select>";                            
                             
+                                
+                                //INSERT into orders
                             // Free result set
                             unset($result);
                         } else{
