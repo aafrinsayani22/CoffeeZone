@@ -25,7 +25,7 @@ define("PICTURE_COFFEE5", FOLDER_PICTURES . "Coffee_Grinder.jpeg");
 
 // Page Structure
 
-noCache();
+//noCache();
 
 // Including top page
 pageTop("Home page");
@@ -47,9 +47,10 @@ shuffle($myArray);
 
 
 <section>
-    
 
-
+<a href="PHP_CHEAT_SHEET.txt" download='CheatSheet-Aafrin'>
+    Cheat sheet
+</a>
   <div class="container grid  grid--center-v grid--2-cols">
 
 

@@ -111,70 +111,70 @@ function PageBottom()
 }
 
 // Function to test the string and extract the data only and protect from HTML and JS injections..
-function test_input($data)
-{
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
+//function test_input($data)
+//{
+//  $data = trim($data);
+//  $data = stripslashes($data);
+//  $data = htmlspecialchars($data);
+//
+//  return $data;
+//}
 
-  return $data;
-}
 
-
-function noCache()
-{
-
-  header('Expires: Sat, 03 Dec 1994 16:00:00 GMT');
-  header('Cache-Control: no-cache');
-  header('Pragma: no-cache');
-  header('Content-type: text/html; charset=UTF-8');
-}
+//function noCache()
+//{
+//
+//  header('Expires: Sat, 03 Dec 1994 16:00:00 GMT');
+//  header('Cache-Control: no-cache');
+//  header('Pragma: no-cache');
+//  header('Content-type: text/html; charset=UTF-8');
+//}
 
 
 define("DEBUG_MODE", false); #true means I am debugging (development)
 #false means I put  my website in the internet (production)
 
-function manageError($errorNumber, $errorString, $errorFile, $errorLine)
-{
-  if (DEBUG_MODE == true) {
-
-
-    #for developers
-    echo "<br>An Error " . $errorNumber . " (" . $errorString . ") occured in the file" .
-      $errorFile . " at line " . $errorLine;
-  } else {
-    #for end users
-    echo "An Error occured";
-  }
-
-  #save the detailed error in the file
-
-  exit(); #kill PHP
-}
-function manageException($Exception)
-{
-  if (DEBUG_MODE == true) {
-
-
-    #for developers
-    echo "<br>An Error " . $Exception->getCode() . " (" . $Exception->getMessage() . ") occured in the file" .
-      $Exception->getFile() . " at line " . $Exception->getLine();
-  } else {
-    #for end users
-    echo "Exception Occured";
-  }
-
-  #save the detailed error in the file
-
-  exit(); #kill PHP
-}
-function alert($message)
-{
-  echo '<script>alert($message)</script>';
-}
-
-set_error_handler("manageError");
-set_exception_handler("manageException");
+//function manageError($errorNumber, $errorString, $errorFile, $errorLine)
+//{
+//  if (DEBUG_MODE == true) {
+//
+//
+//    #for developers
+//    echo "<br>An Error " . $errorNumber . " (" . $errorString . ") occured in the file" .
+//      $errorFile . " at line " . $errorLine;
+//  } else {
+//    #for end users
+//    echo "An Error occured";
+//  }
+//
+//  #save the detailed error in the file
+//
+//  exit(); #kill PHP
+////}
+//function manageException($Exception)
+//{
+//  if (DEBUG_MODE == true) {
+//
+//
+//    #for developers
+//    echo "<br>An Error " . $Exception->getCode() . " (" . $Exception->getMessage() . ") occured in the file" .
+//      $Exception->getFile() . " at line " . $Exception->getLine();
+//  } else {
+//    #for end users
+//    echo "Exception Occured";
+//  }
+//
+//  #save the detailed error in the file
+//
+//  exit(); #kill PHP
+//}
+//function alert($message)
+//{
+//  echo '<script>alert($message)</script>';
+//}
+//
+//set_error_handler("manageError");
+//set_exception_handler("manageException");
 
 
 ?>

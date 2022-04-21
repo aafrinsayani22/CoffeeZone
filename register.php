@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 
 
 // Include config file
@@ -18,7 +18,7 @@ include_once('functions/phpfunction.php');
 navigationMenu();
 
 // Top Page function call
-PageTop("Buy Page");
+PageTop("Sign-Up Page");
 
 
 ?>
@@ -31,7 +31,7 @@ PageTop("Buy Page");
 
 
 
- // Check if the user is logged in, if not then redirect him to login page
+  //Check if the user is logged in, if not then redirect him to login page
 //if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 //    header("location: login.php");
 //    exit;
@@ -85,7 +85,7 @@ if(isset($_POST["signup"])){
         if($PDOobject = $connection->prepare($sql)){
             
             // Bind variables to the prepared statement as parameters
-              $PDOobject->bindParam(":username", $p_username, PDO::PARAM_STR);
+            $PDOobject->bindParam(":username", $p_username, PDO::PARAM_STR);
               
             // Set parameters
             $p_username = $username;
@@ -93,7 +93,7 @@ if(isset($_POST["signup"])){
             // Eexecute the prepared statement
             if($PDOobject->execute()){
                 if($PDOobject->rowCount() == 1){
-                    $username_err = "This username is already taken.";
+                    $username_err = "Try different username.";
                 } else{
                     // Store the value into customer object of the given username.
                     $customer->setFirstname(trim($firstname));

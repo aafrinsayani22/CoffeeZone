@@ -74,11 +74,9 @@ class order {
     
     public function setComment($newComment) {
 
-        if (mb_strlen($newComment) == 0) {
-            return "The price is empty. ";
-        }
+        
         if (mb_strlen($newComment) > self::COMMENTS_MAX) {
-            return "The price must be less than 25";
+            return "The price must be less than 200 Characters";
         }
         else {
             $this->comments = $newComment;

@@ -5,7 +5,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
  */
 
-require_once('connection.php'); #connection = new PDo
+require_once('config.php'); #connection = new PDo
 
 class customer {
 
@@ -69,7 +69,7 @@ class customer {
     public function setFirstname($newFirstname) {
 
         if (mb_strlen($newFirstname) == 0) {
-            return "The firstname is empty.";
+            return "Please enter a firstname..";
         }
         if (mb_strlen($newFirstname) > self::FIRSTNAME_MAX_LENGTH) {
             return "The firstname must be less than 20.";
@@ -82,7 +82,7 @@ class customer {
     public function setLastname($newLastname) {
 
         if (mb_strlen($newLastname) == 0) {
-            return "The lastname is empty.";
+            return "Please enter a lastname.";
         } 
         if (mb_strlen($newLastname) > self::LASTNAME_MAX_LENGTH) {
             return "The lastname must be less than 20 char";
@@ -95,7 +95,7 @@ class customer {
     public function setCity($newCity) {
 
         if (mb_strlen($newCity) == 0) {
-            return "The city is empty. ";
+            return "Please enter a City.";
         }
         if (mb_strlen($newCity) > self::CITY_MAX_LENGTH) {
             return "The city must be less than 25";
@@ -108,7 +108,7 @@ class customer {
     public function setAddress($newAddress) {
 
         if (mb_strlen($newAddress) == 0) {
-            return "The address is empty";
+            return "Please enter address.";
         }
         
         if (mb_strlen($newAddress) > self::ADDRESS_MAX_LENGTH) {
@@ -121,7 +121,7 @@ class customer {
     public function setPostal_code($newPostal_code) {
 
         if (mb_strlen($newPostal_code) == 0) {
-            return "The postal code is empty";
+            return "Please enter postal code.";
         }
         if (mb_strlen($newPostal_code) > self::POSTAL_CODE ) {
             return "The postal code must be less than 7";
@@ -133,7 +133,7 @@ class customer {
     public function setProvince($newProvince) {
 
         if (mb_strlen($newProvince) == 0) {
-            return "The province is empty.";
+            return "Please enter province..";
         }
         if (mb_strlen($newProvince) > self::PROVINCE_MAX_LENGTH) {
             return "The province must be less than 25 char";
@@ -145,7 +145,7 @@ class customer {
         public function setUsername($newUsername) {
 
         if (mb_strlen($newUsername) == 0) {
-            return "The username is empty";
+            return "Please enter Username.";
         }
         if (mb_strlen($newUsername) > self::USERNAME_MAX_LENGTH) {
             return "The username is empty";
@@ -157,7 +157,7 @@ class customer {
     public function setPassword($newPassword) {
 
         if (mb_strlen($newPassword) == 0) {
-            return "The password is empty.";
+            return "Please enter Password.";
         }
         if (mb_strlen($newPassword) > self::PASSWORD_MAX_LENGTH) {
             return "The password must be 255 char";

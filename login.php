@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 
 
 // Include config file
@@ -12,7 +12,7 @@ include_once('functions/phpfunction.php');
 
 
 // Page Structure
-noCache();
+//noCache();
 
 // Navigation Bar function call
 navigationMenu();
