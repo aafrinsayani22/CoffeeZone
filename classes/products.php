@@ -1,11 +1,11 @@
 <?php
 
+// Revision History:
+// Developer     STUDENT-ID Date       COMMENTS
+// Aafrin Sayani (2030150) 2022-04-18 Created classes folder and files
+// Aafrin Sayani (2030150) 2022-04-18 Added plural class for products..
+// Aafrin Sayani (2030150) 2022-04-18 completed plural class products
 
-
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
 require_once("collection.php");
 
 class products extends collection 

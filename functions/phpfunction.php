@@ -1,24 +1,17 @@
 <?php
 // Revision History:
-// Developer     STUDENT-ID Date       COMMENTS
-// Aafrin Sayani (2030150) 2022-02-17 Created NB proj
-// Aafrin Sayani (2030150) 2022-02-19 Add funcs/CSS
-// Aafrin Sayani (2030150) 2022-02-25 Completed index
-// Aafrin Sayani (2030150) 2022-03-1 Completed Buy Pg
-// Aafrin Sayani (2030150) 2022-03-04 Completed JSON
-// Aafrin Sayani (2030150) 2022-03-05 More Comments
-// Aafrin Sayani (2030150) 2022-03-05 Finalized Orders page.
-// Include config file
-require_once "config.php";
 
-require_once "customer.php";
+
+//require_once '../config.php';
+//require_once '../classes/product.php';
+//require_once '../classes/customer.php';
 // Including common functionce file
-include_once('functions/phpfunction.php');
+
 // Navigation Bar function call
 // Include config file
-require_once "config.php";
-// Defining Constant variables for later use.
-require_once './config.php';
+//require_once "config.php";
+
+
 define("FILE_INDEX", "./index.php");
 
 define("FILE_UPDATE", "./account.php");
@@ -31,15 +24,119 @@ define("LOGO_IMAGE", FOLDER_IMAGES . "logo5.png");
 define("FOLDER_CSS", "CSS/");
 define("FILE_CSS", FOLDER_CSS . "style.css");
 define("PRINT_CSS", FOLDER_CSS . "print.css");
+// Defining all the constant variables.
+define("FOLDER_PICTURES", "pictures/");
+define("PICTURE_COFFEE1", FOLDER_PICTURES . "FrenchPress.jpeg");
+define("PICTURE_COFFEE2", FOLDER_PICTURES . "MiniGrinder.jpeg");
+// define("PICTURE_COFFEE3", FOLDER_PICTURES . "FrenchPress.jpeg");
+define("PICTURE_COFFEE4", FOLDER_PICTURES . "VacuumPot.jpeg");
+define("PICTURE_COFFEE5", FOLDER_PICTURES . "Coffee_Grinder.jpeg");
 
-// Define variables and initialize with empty values
-$username = $password = $avatar = $lastname = "";
-$username_err = $password_err = $login_err = "";
+// // Define variables and initialize with empty values
+
+function table($row) { ?>
+     <tr class='table-row'>
+
+		<td><?php echo $row['created']; ?></td>
+		<td><?php echo $row['product_id']; ?></td>
+		<td><?php echo $row['firstname']; ?></td>
+                <td><?php echo $row['lastname']; ?></td>
+		<td><?php echo $row['city']; ?></td>
+		<td><?php echo $row['comments']; ?></td>
+                <td><?php echo $row['price']; ?></td>
+                <td><?php echo $row['qty_sold']; ?></td>
+		<td><?php echo $row['sub_total']; ?></td>
+		<td><?php echo $row['taxes_amount']; ?></td>
+                <td><?php echo $row['total']; ?></td>
+                <td><a href="delete.php?id='<?php $_SESSION["id"] ?>" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash">delete</span></a></td>
+     </tr> <?php
+}
+function buyForm() {
+    $quantity = $comment = "";
+    $quantity_err = $comment_err = "";
+    ?>
+    <div class="Container-form" style="background-color: #39b2c4;">
+        <h2>Buy</h2>
+        <p>Choose Items.</p>
 
 
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
-function session() {
-global $connection;
+            <span class="error">*  <?php echo $quantity_err ?></span>
+            <label>Quantity</label>
+            <input type="text" name="quantity"  value="<?php //echo $quantity;  ?>">
+            <br><br>
+
+            <span class="error">*  <?php echo $comment_err ?></span>
+            <label>Comment</label>
+            <input type="text" name="comment" value="<?php // echo $comment;  ?> ">
+
+
+            <div class="">
+                <input type="submit" style="background-color: #1d5962; margin-bottom: 2px;"  value="Buy">
+            </div>
+
+        </form>
+    </div>
+    <?php
+}
+
+//
+
+function imageShuffle() {
+    $myArray = array(PICTURE_COFFEE1, PICTURE_COFFEE2, PICTURE_COFFEE5, PICTURE_COFFEE4);
+    // Defining an arrays of Advertising images.
+// Shufflling images to show random images when we acess the first index of the array.
+    shuffle($myArray);
+    ?>
+    <section>
+
+        <a class="main-nav-link nav-cta" href="PHP_CHEAT_SHEET.txt" download='CheatSheet-Aafrin'>
+            Cheat sheet
+        </a>
+        <div class="container grid  grid--center-v grid--2-cols">
+
+
+            <div>
+                <section class="section-head">
+                    <div class="head">
+                        <div>
+                            <h2 class="heading-primary">
+                                About us
+                            </h2>
+                            <p class="head-description">
+                                Our mission since we started has stayed simple: introduce our customers to the estates we directly buy our great tasting coffee from, roast the beans with care, and make high quality coffee more accessible through our cafes and our website. The coffee we roast is the coffee we like to drink, and we hope you like it too.
+                            </p>
+                            <p class="heading-secondary">A culture of constant learning is the key to always pushing coffee forward.</p>
+                            <p class="head-description">
+                                We are consistently researching, testing and implementing best practices throughout our business to raise the bar. Making refractometers essential for our cafe brewing, holding advanced sensory learnings for junior roasters, and experimenting with processing at the farm level are just some of the ways that our highly skilled team is constantly evolving the way Indian coffee is treated, experienced or communicated about.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </section>
+            </div>
+
+            <div>
+                <a target="_blank" href="https://eightouncecoffee.ca/">
+                    <img class="<?php
+    if ($myArray[0] == PICTURE_COFFEE1) {
+
+        echo "bigImage";
+    } else {
+
+        echo "smallImage";
+    }
+    ?>" src="<?php echo $myArray[0]; ?>" alt="Advertisement"> </a>
+            </div>
+
+    </section>
+    <?php
+}
+
+function checkLogin() {
+    global $connection;
     if (isset($_SESSION["id"])) {
         global $connection;
         $sql = "SELECT * FROM customers WHERE customer_id = :id";
@@ -69,14 +166,12 @@ global $connection;
 
                     echo "  {$firstname} {$lastname} ";
 
-                    
                     echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='logout.php'>Logout!</a>";
-                  
                     ?>
                     </div>
 
                         <?php
-                }
+                    }
 //                    } else {
 //                        // URL doesn't contain valid id. Redirect to error page
 //                        
@@ -86,7 +181,6 @@ global $connection;
             }
         } else {
             echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='login.php'>Please login!</a>";
-           
         }
     }
 
@@ -292,12 +386,12 @@ function PageTop($pageTitle) {
 
         <body>
 
-    <?php
-}
+                  <?php
+              }
 
 // Creating function for navigation bar for multiple use on every page.
-function navigationMenu() {
-    ?>
+              function navigationMenu() {
+                  ?>
             <header class="header">
                 <a href=" <?php echo FILE_INDEX ?>">
                     <img class="logo" alt="Aafrin Cafe logo" src=" <?php echo LOGO_IMAGE ?>">
@@ -407,7 +501,7 @@ function signUp() {
                             <label>Picture</label>
                             <span class="error">*  <?php echo $avatar_err ?></span>
                             <br>
-                            <input type="file" name="avatar" value="<?php // echo $avatar;  ?>">
+                            <input type="file" name="avatar" value="<?php // echo $avatar;   ?>">
                             <br><br>
 
 
@@ -436,14 +530,14 @@ function signUp() {
 //
 //  return $data;
 //}
-//function noCache()
-//{
-//
-//  header('Expires: Sat, 03 Dec 1994 16:00:00 GMT');
-//  header('Cache-Control: no-cache');
-//  header('Pragma: no-cache');
-//  header('Content-type: text/html; charset=UTF-8');
-//}
+function noCache()
+{
+
+  header('Expires: Sat, 03 Dec 1994 16:00:00 GMT');
+  header('Cache-Control: no-cache');
+  header('Pragma: no-cache');
+  header('Content-type: text/html; charset=UTF-8');
+}
 //define("DEBUG_MODE", false); #true means I am debugging (development)
 #false means I put  my website in the internet (production)
 //function manageError($errorNumber, $errorString, $errorFile, $errorLine)

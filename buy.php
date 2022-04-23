@@ -1,12 +1,31 @@
 
 <?php
+
+// Revision History:
+// Developer     STUDENT-ID Date       COMMENTS
+// Aafrin Sayani (2030150) 2022-04-20 added file and intialized.
+// Aafrin Sayani (2030150) 2022-04-20 Addes html to generate form
+// Aafrin Sayani (2030150) 2022-04-20 Added css
+// Aafrin Sayani (2030150) 2022-04-20 Populated product data into database
+// Aafrin Sayani (2030150) 2022-04-21  Added logic to retrieve the products from the database
+// Aafrin Sayani (2030150) 2022-04-21 Added extra  feilds into the database
+// Aafrin Sayani (2030150) 2022-04-21 Added objects connection to manipulate with database
+// Aafrin Sayani (2030150) 2022-04-21 Prevented agaiinst sql injection.
+// Aafrin Sayani (2030150) 2022-04-21 Added session and tested
+// Aafrin Sayani (2030150) 2022-04-23 Finalized Buy page.
+
 session_start();
+
 require_once './config.php';
 
 require_once './classes/product.php';
 // Including common functionce file
 include_once('functions/phpfunction.php');
-// Navigation Bar function call
+// // Define variables and initialize with empty values
+$quantity = $comment = $prod_id = "";
+$quantity_err = $comment_err = "";
+// 
+// 
 // Page Structure
 //noCache();
 // Navigation Bar function call
@@ -14,36 +33,13 @@ navigationMenu();
 
 // Top Page function call
 PageTop("Buy Page");
-if(!isset($_SESSION["id"]))
-{
-     session();
-     exit;
+
+if (!isset($_SESSION["id"])) {
+    checkLogin();
+    exit;
+} else {
+    checkLogin();
 }
-else
-{
-    session();
-    
-
-}
-
-?>
-
-<?php
-// Check if the user is already logged in, if yes then redirect him to welcome page
-//if (!isset($_SESSION["loggedin"]) && !$_SESSION["loggedin"] === true) {
-//    header("location: login.php");
-//    exit;
-//}
-
-// Include config file
-
-
-// Define variables and initialize with empty values
-$quantity = $comment = "";
-$quantity_err = $comment_err = "";
-
-
-// Include config fil
 
 // Attempt select query execution
 $sql = "CALL product_all()";
@@ -52,16 +48,18 @@ if ($result = $connection->query($sql)) {
 
         echo '<label for="Products">Choose Product:</label>';
         echo '<select name="product" id="cars">';
-       
+
         while ($row = $result->fetch()) {
 
             $prod_id = $row['product_id'];
+
             echo "<option value='" . $row['product_id'] . "'>" . $row['prod_code'] . "-" . $row['description'] . " (" . $row['price'] . "$)" . "</option>";
         }
         echo "</select>";
 
         //INSERT into orders
         // Free result set
+
         unset($result);
     } else {
         echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
@@ -70,13 +68,7 @@ if ($result = $connection->query($sql)) {
     echo "Oops! Something went wrong. Please try again later.";
 }
 
-// Close connection
-//unset($connection);
-?>
 
-
-
-<?php
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -84,10 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if username is empty
     if (empty(htmlspecialchars($_POST["quantity"]))) {
         $quantity_err = "Please enter quantity.";
-    } else if(!($_POST["quantity"] > 1 || $_POST["quantity"] < 99)) {
+    } else if (!($_POST["quantity"] > 1 || $_POST["quantity"] < 99)) {
         $quantity_err = "Please enter valid quantity(1-99)";
-    }
-    else {
+    } else {
         $quantity = htmlspecialchars($_POST["quantity"]);
     }
 
@@ -100,23 +91,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate credentials
     if (empty($quantity_err) && empty($comment_err)) {
-        
-        
+
+
         $product = new product();
         $product->load($prod_id);
-        
-        $price = $product->getPrice();
-       
-        
-        $quantity = $_POST["quantity"];
-        
-        $subtotal = floatval($price) * $quantity;
-        $taxesAmount = $subtotal  * 13.7/100;
-        
-        $total = $subtotal + $taxesAmount; #this gives 211.563
-                
-        $sql = "INSERT INTO orders( qty_sold, sold_price, comments, c_id, p_id, sub_total, taxes_amount, total) VALUES( :qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)";
 
+        $price = $product->getPrice();
+        $quantity = $_POST["quantity"];
+
+        $subtotal = floatval($price) * $quantity;
+        $taxesAmount = $subtotal * 13.7 / 100;
+
+        $total = $subtotal + $taxesAmount; #this gives 211.563
+        //$sql = "CALL order_insert(:qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)" ;      
+        $sql = "INSERT INTO orders( qty_sold, sold_price, comments, c_id, p_id, sub_total, taxes_amount, total) VALUES( :qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)";
 
         // Prepare a select statement
         //$sql = "CALL order_insert(:qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)";
@@ -144,14 +132,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Attempt to execute the prepared statement
             if ($PDOobject->execute()) {
-                
+
                 echo "Product added successfully!";
-                
             } else {
                 echo "Oops! Something went wrong . Please try again later.";
             }
-
-            
         }
         // Close statement
         unset($PDOobject);
@@ -160,39 +145,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     unset($connection);
 }
+buyForm();
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Login</title>
-
-    </head>
-    <body>
-        <div class="Container-form" style="background-color: #39b2c4;">
-            <h2>Buy</h2>
-            <p>Choose Items.</p>
-
-            
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-
-                <span class="error">*  <?php echo $quantity_err ?></span>
-                <label>Quantity</label>
-                <input type="text" name="quantity"  value="<?php //echo $quantity; ?>">
-                <br><br>
-
-                <span class="error">*  <?php echo $comment_err ?></span>
-                <label>Comment</label>
-                <input type="text" name="comment" value="<?php  // echo $comment; ?> ">
-
-
-                <div class="">
-                    <input type="submit" style="background-color: #1d5962; margin-bottom: 2px;"  value="Buy">
-                </div>
-       
-            </form>
-        </div>
-    </body>
-</html>
-

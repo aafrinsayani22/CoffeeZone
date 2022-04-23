@@ -1,9 +1,11 @@
 <?php
 
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
+
+// Revision History:
+// Developer     STUDENT-ID Date       COMMENTS
+// Aafrin Sayani (2030150) 2022-04-19 Created classes folder and files
+// Aafrin Sayani (2030150) 2022-04-19 Added singular class for order.
+// Aafrin Sayani (2030150) 2022-04-19 finalized class for order.
 
 require_once('connection.php'); #connection = new PDo
 
