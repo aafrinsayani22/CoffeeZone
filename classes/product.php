@@ -1,11 +1,10 @@
 <?php
 
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
-
-require_once('connection.php'); #connection = new PDo
+// Revision History:
+// Developer     STUDENT-ID Date       COMMENTS
+// Aafrin Sayani (2030150) 2022-04-18 Created classes folder and files
+// Aafrin Sayani (2030150) 2022-04-18 Added singular class for product.
+// Aafrin Sayani (2030150) 2022-04-18 finished singular class product.
 
 class product {
 
@@ -95,13 +94,13 @@ class product {
  
     }
 
-    public function load($product_code) {
+    public function load($product_id) {
         global $connection;
 
-        $sql = "CALL product_select(:product_code)";
+        $sql = "CALL product_select(:product_id)";
 
         $PDOobject = $connection->prepare($sql);
-        $PDOobject->bindParam(':product_code', $product_code);
+        $PDOobject->bindParam(':product_id', $product_id);
         $PDOobject->execute();
 
         if ($row = $PDOobject->fetch(PDO::FETCH_ASSOC)) {

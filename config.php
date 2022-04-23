@@ -1,6 +1,10 @@
 <?php
-/* Database credentials. Assuming you are running MySQL
-server with default setting (user 'root' with no password) */
+
+// Revision History:
+// Developer     STUDENT-ID Date       COMMENTS
+// Aafrin Sayani (2030150) 2022-04-19 Added database connection string.
+
+
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '1234');
@@ -14,4 +18,7 @@ try{
 } catch(PDOException $e){
     die("ERROR: Could not connect. " . $e->getMessage());
 }
+
+
+
 ?>
