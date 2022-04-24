@@ -1,4 +1,5 @@
 <?php
+
 //To access the session id value.
 session_start();
 // Revision History:
@@ -13,8 +14,6 @@ session_start();
 // Aafrin Sayani (2030150) 2022-04-22 added check login session.
 // Aafrin Sayani (2030150) 2022-04-22 prevented from sql/HTML injection
 // Aafrin Sayani (2030150) 2022-04-23 Completed by fixing issues.
-
-
 // Including common functions file
 include_once('functions/phpfunction.php');
 
@@ -31,7 +30,6 @@ navigationMenu();
 
 // Top Page function call
 PageTop("Login");
-
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -111,5 +109,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     unset($connection);
 }
-loginHTML($username,$password,$avatar,$lastname,$username_err,$password_err,$login_err);
+loginHTML($username, $password, $avatar, $lastname, $username_err, $password_err, $login_err);
 ?>

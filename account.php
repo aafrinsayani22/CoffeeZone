@@ -22,31 +22,30 @@ require_once "config.php";
 require_once './classes/customer.php';
 // Including common functionce file
 include_once('functions/phpfunction.php');
-// Navigation Bar function call
+
 // Page Structure
+noCache();
+
 // Navigation Bar function call
-   navigationMenu();
+navigationMenu();
 
 // Top Page function call
-PageTop("Sign-Up Page");
+PageTop("Buy Page");
+;
 
-if(!isset($_SESSION["id"]))
-{
+if (!isset($_SESSION["id"])) {
     checkLogin();
-     exit;
-}
-else
-{
+    exit;
+} else {
     checkLogin();
-
 }
-
 ?>
 
 <?php
+
 // Include config file
 // Define variables and initialize with empty values
-$username = $avatar = $password = $firstname = $lastname = $province= $address = $city = $postal_code = "";
+$username = $avatar = $password = $firstname = $lastname = $province = $address = $city = $postal_code = "";
 $firstname_err = $lastname_err = $address_err = $city_err = $postal_code_err = $avatar_err = "";
 $username_err = $password_err = "";
 $avatar = NULL;
@@ -54,11 +53,10 @@ $avatar = NULL;
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get teh file content
-        if ($_FILES['avatar']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
-        
+    if ($_FILES['avatar']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
+
         $avatar = file_get_contents($_FILES['avatar']['tmp_name']);
-       // $customer->setAvatar($avatar);
-        
+        // $customer->setAvatar($avatar);
     } else {
         $avatar_err = "please upload a file";
     }
@@ -125,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $p_username = $customer->getUsername();
                 $p_password = password_hash($customer->getPassword(), PASSWORD_DEFAULT);
                 $p_customer_id = $id;
-                $p_avatar= $avatar;
+                $p_avatar = $avatar;
 
                 // Attempt to execute the prepared statement
                 if ($stmt->execute()) {
@@ -177,7 +175,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $postal_code = $row["postal_code"];
                     $username = $row["username"];
                     $password = "";
-                    
                 } else {
                     // URL doesn't contain valid id. Redirect to error page
                     header("location: error.php");

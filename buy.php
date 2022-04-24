@@ -1,5 +1,6 @@
 
 <?php
+
 session_start();
 // Revision History:
 // Developer     STUDENT-ID Date       COMMENTS
@@ -13,7 +14,6 @@ session_start();
 // Aafrin Sayani (2030150) 2022-04-21 Prevented agaiinst sql injection.
 // Aafrin Sayani (2030150) 2022-04-21 Added session and tested
 // Aafrin Sayani (2030150) 2022-04-23 Finalized Buy page.
-
 // Including common functionce file
 include_once('functions/phpfunction.php');
 
@@ -35,14 +35,13 @@ if (!isset($_SESSION["id"])) {
 // Define variables and initialize with empty values
 $quantity = $comment = $prod_id = "";
 $quantity_err = $comment_err = "";
-      $price = $sub_total = $taxesAmount = 0.00;
-
+$price = $p_price = $sub_total = $taxesAmount = 0.00;
 
 // Attempt select query execution ot retrieve all the products from the database
 $sql = "CALL product_all()";
 if ($result = $connection->query($sql)) {
     if ($result->rowCount() > 0) {
-
+        $product = new product();
         // print the dropdown list.
         echo '<label for="Products">Choose Product:</label>';
         echo '<select name="product" id="cars">';
@@ -50,16 +49,13 @@ if ($result = $connection->query($sql)) {
         // fetch the data to list products
         while ($row = $result->fetch()) {
 
-          
-
             echo "<option value='" . $row['product_id'] . "'>" . $row['prod_code'] . "-" . $row['description'] . " (" . $row['price'] . "$)" . "</option>";
-            $prod_id = $row['product_id'];
-            $price = $row["price"];
-           
+            $prod_id = $row["product_id"];
         }
         echo "</select>";
-
-
+//$product->load($row['product_id']);
+//$price = $product->getPrice();
+        echo $price;
         // Free result set
         unset($result);
     } else {
@@ -69,7 +65,7 @@ if ($result = $connection->query($sql)) {
     echo "Oops! Something went wrong. Please try again later.";
 }
 
-echo $prod_id;
+
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -84,32 +80,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     if (htmlspecialchars($_POST["quantity"])) {
         $comment_err = $order->setComment($_POST["comment"]);
-    }
-    else {
-        
+    } else {
+
         $order->setComment(htmlspecialchars($_POST["comment"]));
         $order->setQuantity_sold(htmlspecialchars($_POST["quantity"]));
     }
 
-
     // Validate credentials
     if (empty($quantity_err)) {
 
-        $product->load($prod_id);
+        $product = $product->load($prod_id);
+        $sql = "select * from products where product_id = :product_id";
 
-        echo $price;
-    
+        $PDOobject = $connection->prepare($sql);
+        $PDOobject->bindParam(':product_id', $prod_id);
+        $PDOobject->execute();
+
+        if ($row = $PDOobject->fetch(PDO::FETCH_ASSOC)) {
+
+            $p_price = $row["price"];
+        }
+
         $quantity = htmlspecialchars($_POST["quantity"]);
-        $comment =htmlspecialchars($_POST["comment"]);
-        $product_id = $prod_id;
-        echo $prod_id;
-        echo $product->getPrice();
+        $comment = htmlspecialchars($_POST["comment"]);
 
-        $subtotal = floatval($price) * $order->getQuantity_sold();
-        $taxesAmount = $subtotal * 13.7 / 100;
-        echo $price, $subtotal, $taxesAmount;
+        $subtotal = floatval($p_price) * $_POST["quantity"];
+        $taxesAmount = floatval($subtotal) * (13.7 / 100);
         $total = $subtotal + $taxesAmount; #this gives 211.563
-        
         //$sql = "CALL order_insert(:qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)" ;      
         $sql = "INSERT INTO orders( qty_sold, sold_price, comments, c_id, p_id, sub_total, taxes_amount, total) VALUES( :qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)";
 
@@ -128,8 +125,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $PDOobject->bindParam(":taxes_amount", $p_taxes_amount, PDO::PARAM_STR);
 
             // Set parameters
-            $p_sold_price = $price;
-            $p_quantity = $order->getQuantity_sold();
+            $p_sold_price = $p_price;
+            $p_quantity = $_POST["quantity"];
             $p_comments = $order->getComment();
             $p_p_id = $prod_id;
             $p_c_id = $_SESSION["id"];
@@ -153,5 +150,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     unset($connection);
 }
 
-buyForm($quantity,$comment,$prod_id,$quantity_err,$comment_err);
+buyForm($quantity, $comment, $prod_id, $quantity_err, $comment_err);
 ?>

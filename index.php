@@ -1,4 +1,5 @@
 <?php
+
 //Start the session to read the session id if its set or not
 session_start();
 // Revision History:

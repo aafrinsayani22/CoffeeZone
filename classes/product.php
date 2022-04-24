@@ -105,7 +105,7 @@ class product {
         if ($row = $PDOobject->fetch(PDO::FETCH_ASSOC)) {
             $this->description = $row["description"];
             $this->price = $row["price"];
-           echo $row["price"];
+
             $this->cost_price = $row["cost_price"];
        
             return true;
