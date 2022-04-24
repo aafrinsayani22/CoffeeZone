@@ -177,6 +177,6 @@ if (isset($_POST["signup"])) {
 }
 
 //Call signup html  funciton with the errors strings recieved from the validations.
-signUpHTML($customer, $username_err,$password_err,$firstname_err,$lastname_err,$address_err,$city_err,$postal_code_err,$avatar_err,$username,$avatar,$password,$firstname,$lastname,$address,$city,$postal_code,$province);
+signUpHTML($username_err,$password_err,$firstname_err,$lastname_err,$address_err,$city_err,$postal_code_err,$avatar_err,$username,$avatar,$password,$firstname,$lastname,$address,$city,$postal_code,$province);
 ?>
 

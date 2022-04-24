@@ -1,4 +1,5 @@
 <?php
+
 // Revision History:
 // Developer     STUDENT-ID Date       COMMENTS
 // Aafrin Sayani (2030150) 2022-04-22 added file and intialized.
@@ -19,11 +20,7 @@ require_once './classes/customer.php';
 include_once('functions/phpfunction.php');
 // Navigation Bar function call
 // Page Structure
-// Page Structure
 noCache();
-
-// Top Page function call
-PageTop("Buy Page");
 // Navigation Bar function call
 navigationMenu();
 

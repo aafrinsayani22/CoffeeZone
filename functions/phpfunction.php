@@ -504,44 +504,44 @@ function account($username_err, $password_err, $username, $avatar, $password, $f
     </section>
     <?php
 }
-
-define("DEBUG_MODE", false); #true means I am debugging (development)
-#false means I put  my website in the internet (production)
-
-function manageError($errorNumber, $errorString, $errorFile, $errorLine) {
-    if (DEBUG_MODE == true) {
 //
+//define("DEBUG_MODE", false); #true means I am debugging (development)
+//#false means I put  my website in the internet (production)
 //
-//    #for developers
-        echo "<br>An Error " . $errorNumber . " (" . $errorString . ") occured in the file" .
-        $errorFile . " at line " . $errorLine;
-    } else {
-//    #for end users
-        echo "An Error occured";
-    }
+//function manageError($errorNumber, $errorString, $errorFile, $errorLine) {
+//    if (DEBUG_MODE == true) {
+////
+////
+////    #for developers
+//        echo "<br>An Error " . $errorNumber . " (" . $errorString . ") occured in the file" .
+//        $errorFile . " at line " . $errorLine;
+//    } else {
+////    #for end users
+//        echo "An Error occured";
+//    }
+////
+////  #
+////save the detailed error in the file
+//    exit(); #kill PHP
+//}
 //
-//  #
-//save the detailed error in the file
-    exit(); #kill PHP
-}
-
-function manageException($Exception) {
-    if (DEBUG_MODE == true) {
-
-        #for developers
-        echo "<br>An Error " . $Exception->getCode() . " (" . $Exception->getMessage() . ") occured in the file" .
-        $Exception->getFile() . " at line " . $Exception->getLine();
-    } else {
-//    #for end users
-//    echo "Exception Occured";
-    }
+//function manageException($Exception) {
+//    if (DEBUG_MODE == true) {
 //
-//  #save the detailed error in the file
-    $log_file = "./my-errors.txt";
-    exit(); #kill PHP
-}
-
+//        #for developers
+//        echo "<br>An Error " . $Exception->getCode() . " (" . $Exception->getMessage() . ") occured in the file" .
+//        $Exception->getFile() . " at line " . $Exception->getLine();
+//    } else {
+////    #for end users
+////    echo "Exception Occured";
+//    }
+////
+////  #save the detailed error in the file
+//    $log_file = "./my-errors.txt";
+//    exit(); #kill PHP
+//}
 //
-set_error_handler("manageError");
-set_exception_handler("manageException");
+////
+//set_error_handler("manageError");
+//set_exception_handler("manageException");
 ?>

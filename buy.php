@@ -55,7 +55,7 @@ if ($result = $connection->query($sql)) {
         echo "</select>";
 //$product->load($row['product_id']);
 //$price = $product->getPrice();
-        echo $price;
+   
         // Free result set
         unset($result);
     } else {
