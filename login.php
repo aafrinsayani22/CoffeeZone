@@ -1,5 +1,6 @@
 <?php
-
+//To access the session id value.
+session_start();
 // Revision History:
 // Developer     STUDENT-ID Date       COMMENTS
 // Aafrin Sayani (2030150) 2022-04-19 Created file.
@@ -13,36 +14,30 @@
 // Aafrin Sayani (2030150) 2022-04-22 prevented from sql/HTML injection
 // Aafrin Sayani (2030150) 2022-04-23 Completed by fixing issues.
 
-// Include config file
-require_once "config.php";
 
-require_once './classes/customer.php';
-// Including common functionce file
+// Including common functions file
 include_once('functions/phpfunction.php');
-// Navigation Bar function call
-// Include config file
-require_once "config.php";
 
 // Define variables and initialize with empty values
 $username = $password = $avatar = $lastname = "";
 $username_err = $password_err = $login_err = "";
+
 // Page Structure
-//noCache();
+// Prevent page caching
+noCache();
+
 // Navigation Bar function call
 navigationMenu();
 
 // Top Page function call
-PageTop("Buy Page");
-?>
+PageTop("Login");
 
-<?php
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: index.php");
     exit;
 }
-
-
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -116,31 +111,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     unset($connection);
 }
+loginHTML($username,$password,$avatar,$lastname,$username_err,$password_err,$login_err);
 ?>
-<div class="Container-form" style="background-color: #39b2c4;">
-    <h2>Login</h2>
-    <p>Please fill in your credentials to login.</p>
-
-    <?php
-    if (!empty($login_err)) {
-        echo '<div class="">' . $login_err . '</div>';
-    }
-    ?>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-
-        <span class="error">*  <?php echo $username_err ?></span>
-        <label>Username</label>
-        <input type="text" name="username"  value="<?php echo $username; ?>">
-        <br><br>
-
-        <span class="error">*  <?php echo $password_err ?></span>
-        <label>Password</label>
-        <input type="password" name="password" >
-
-
-        <div class="">
-            <input type="submit" style="background-color: #1d5962; margin-bottom: 2px;"  value="Login">
-        </div>
-        <p>Don't have an account? <a href="register.php">  Sign up now</a>.</p>
-    </form>
-</div>

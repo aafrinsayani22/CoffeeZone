@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $p_address = $customer->getAddress();
                 $p_city = $customer->getCity();
                 $p_postal_code = $customer->getPostal_code();
-                $p_username = $$customer->getUsername();
+                $p_username = $customer->getUsername();
                 $p_password = password_hash($customer->getPassword(), PASSWORD_DEFAULT);
                 $p_customer_id = $id;
                 $p_avatar= $avatar;
@@ -199,105 +199,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //        exit();
     }
 }
+account($username_err, $password_err, $username, $avatar, $password, $firstname, $lastname, $province, $address, $city, $postal_code, $firstname_err, $lastname_err, $address_err, $city_err, $postal_code_err, $avatar_err)
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Update Record</title>
-        <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-            <style>
-                .wrapper{
-                    width: 600px;
-                    margin: 0 auto;
-                }
-            </style>-->
-    </head>
-    <body>
-        <section class="section-how" id="how">
-            <div class="container">
-                <!--          <h2 class="heading-primary" style="margin-bottom: 2.5rem">
-                            Welcome Folk
-                          </h2>
-                          <h1 class="heading-secondary">Please Create New account with your personal account information.</h1>-->
-            </div>
-            <div class="container grid grid--2-cols-reg grid--center-v">
-                <!-- STEP 02 -->
-                <div class="step-img-box">
-                    <embed src="./undraw_updates_re_o5af.svg" />
-                </div>
-                <div class="step-text-box">
-                    <div class="form" style="
-                         /*box-sizing: border-box;*/
-
-                         ">
-
-                        <div class="Container-form" style="background-color: #39b2c4;">
-              <!--          <p><span class="error" style="color: red; ">* Required field</span></p>-->
-                            <h2>Update Record</h2>
-                            <p>Please edit the input values and submit to update the  record.</p>
-
-                            <form enctype="multipart/form-data" action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
-                                <div class="">
-                                    <label>Firstname</label>
-                                     <span class="error">*   <?php echo $firstname_err ?></span>
-                                    <input type="text" name="firstname"  value="<?php echo $firstname; ?>">
-                                   
-                                </div>
-                                <div class="">
-                                    <label>Lastname</label>
-                                      <span class="error">*  <?php echo $lastname_err; ?></span>
-                                    <input type="text" name="lastname" value="<?php echo $lastname; ?>">
-                                  
-                                </div>
-                                <div class="">
-                                    <label>Address</label>
-                                    <span class="error">*  <?php echo $address_err; ?></span>
-                                    <input type="text" name="address"  value="<?php echo $address; ?>">
-                                    
-                                </div>
-                                <div class="">
-                                    <label>City</label>
-                                      <span class="error">*  <?php echo $city_err; ?></span>
-                                    <input type="text" name="city" value="<?php echo $city; ?>">
-                                  
-                                </div>
-                                <div class="">
-                                    <label>Postal Code:</label>
-                                    <span class="error">*  <?php echo $postal_code_err; ?></span>
-                                    <input type="text" name="postal_code"  value="<?php echo $postal_code; ?>">
-                                
-                                </div>
-                                <div class="">
-                                    <label>Username</label>
-                                    <span class="error">*  <?php echo $username_err; ?></span>
-                                    <input type="text" name="username"  value="<?php echo $username; ?>">
-                 
-                                </div>
-                                <div class="">
-                                    <label>Password</label>
-                                        <span class="error">*  <?php echo $password_err; ?></span>
-                                    <input type="password" name="password"  value="<?php echo $password; ?>">
-                                
-                                </div>
-
-                                <label>Picture</label>
-                                <span class="error">*  <?php echo $avatar_err ?></span>
-                                <br>
-                                <input type="file" name="avatar" value="<?php // echo $avatar;  ?>">
-                                <br><br>
-                                <input type="hidden" name="id" value="<?php echo $id; ?>"/>
-                                <input type="submit" style="background-color: #1d5962; margin: 5px;"" value="Submit">
-        <!--                        <input href="index.php" style="background-color: #1d5962; margin: 5px;" class="btn1" value ="Cancel">-->
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>      
-
-        </div>
-    </div>
-</section>
-</body>
-</html>

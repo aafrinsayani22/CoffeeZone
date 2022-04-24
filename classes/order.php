@@ -7,7 +7,7 @@
 // Aafrin Sayani (2030150) 2022-04-19 Added singular class for order.
 // Aafrin Sayani (2030150) 2022-04-19 finalized class for order.
 
-require_once('connection.php'); #connection = new PDo
+
 
 class order {
 
@@ -21,7 +21,7 @@ class order {
 
     private $order_id = "";
     private $quantity_sold = 0;
-    private $sold_Price = "";
+    private $sold_Price = 0;
     private $comments = "";
     private $customer_id = "";
     private $product_id = "";
@@ -50,14 +50,14 @@ class order {
 
     public function setQuantity_sold($newQuantity) {
 
-        if (mb_strlen($newQuantity) == 0) {
-            return "The product code is empty.";
+        if ($newQuantity == 0) {
+            return "The quantity is empty.";
         }
-        if (mb_strlen($newQuantity) > self::QUANTITY_SOLD_MAX_LENGTH) {
-            return "The product code must be less than 20.";
+        if ($newQuantity > self::QUANTITY_SOLD_MAX_LENGTH) {
+            return "The quantity must be less than 999.";
         }
         else {
-            $this->quantity_sold = $newProductcode;
+            $this->quantity_sold = $newQuantity;
         }
     }
     

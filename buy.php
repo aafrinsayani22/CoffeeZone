@@ -1,6 +1,6 @@
 
 <?php
-
+session_start();
 // Revision History:
 // Developer     STUDENT-ID Date       COMMENTS
 // Aafrin Sayani (2030150) 2022-04-20 added file and intialized.
@@ -14,20 +14,12 @@
 // Aafrin Sayani (2030150) 2022-04-21 Added session and tested
 // Aafrin Sayani (2030150) 2022-04-23 Finalized Buy page.
 
-session_start();
-
-require_once './config.php';
-
-require_once './classes/product.php';
 // Including common functionce file
 include_once('functions/phpfunction.php');
-// // Define variables and initialize with empty values
-$quantity = $comment = $prod_id = "";
-$quantity_err = $comment_err = "";
-// 
-// 
+
 // Page Structure
-//noCache();
+noCache();
+
 // Navigation Bar function call
 navigationMenu();
 
@@ -40,26 +32,35 @@ if (!isset($_SESSION["id"])) {
 } else {
     checkLogin();
 }
+// Define variables and initialize with empty values
+$quantity = $comment = $prod_id = "";
+$quantity_err = $comment_err = "";
+      $price = $sub_total = $taxesAmount = 0.00;
 
-// Attempt select query execution
+
+// Attempt select query execution ot retrieve all the products from the database
 $sql = "CALL product_all()";
 if ($result = $connection->query($sql)) {
     if ($result->rowCount() > 0) {
 
+        // print the dropdown list.
         echo '<label for="Products">Choose Product:</label>';
         echo '<select name="product" id="cars">';
 
+        // fetch the data to list products
         while ($row = $result->fetch()) {
 
-            $prod_id = $row['product_id'];
+          
 
             echo "<option value='" . $row['product_id'] . "'>" . $row['prod_code'] . "-" . $row['description'] . " (" . $row['price'] . "$)" . "</option>";
+            $prod_id = $row['product_id'];
+            $price = $row["price"];
+           
         }
         echo "</select>";
 
-        //INSERT into orders
-        // Free result set
 
+        // Free result set
         unset($result);
     } else {
         echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
@@ -68,41 +69,47 @@ if ($result = $connection->query($sql)) {
     echo "Oops! Something went wrong. Please try again later.";
 }
 
-
+echo $prod_id;
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Check if username is empty
+    // Validate input fields
+    // Create order and product object 
+    $order = new order();
+    $product = new product();
+    // Check if quantity is allowed
     if (empty(htmlspecialchars($_POST["quantity"]))) {
-        $quantity_err = "Please enter quantity.";
-    } else if (!($_POST["quantity"] > 1 || $_POST["quantity"] < 99)) {
-        $quantity_err = "Please enter valid quantity(1-99)";
-    } else {
-        $quantity = htmlspecialchars($_POST["quantity"]);
+        $quantity_err = $order->setQuantity_sold($_POST["quantity"]);
+    }
+    if (htmlspecialchars($_POST["quantity"])) {
+        $comment_err = $order->setComment($_POST["comment"]);
+    }
+    else {
+        
+        $order->setComment(htmlspecialchars($_POST["comment"]));
+        $order->setQuantity_sold(htmlspecialchars($_POST["quantity"]));
     }
 
-    // Check if password is empty
-    if (empty(htmlspecialchars($_POST["comment"]))) {
-        $comment_err = "Please enter your comment.";
-    } else {
-        $comment = htmlspecialchars($_POST["comment"]);
-    }
 
     // Validate credentials
-    if (empty($quantity_err) && empty($comment_err)) {
+    if (empty($quantity_err)) {
 
-
-        $product = new product();
         $product->load($prod_id);
 
-        $price = $product->getPrice();
-        $quantity = $_POST["quantity"];
+        echo $price;
+    
+        $quantity = htmlspecialchars($_POST["quantity"]);
+        $comment =htmlspecialchars($_POST["comment"]);
+        $product_id = $prod_id;
+        echo $prod_id;
+        echo $product->getPrice();
 
-        $subtotal = floatval($price) * $quantity;
+        $subtotal = floatval($price) * $order->getQuantity_sold();
         $taxesAmount = $subtotal * 13.7 / 100;
-
+        echo $price, $subtotal, $taxesAmount;
         $total = $subtotal + $taxesAmount; #this gives 211.563
+        
         //$sql = "CALL order_insert(:qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)" ;      
         $sql = "INSERT INTO orders( qty_sold, sold_price, comments, c_id, p_id, sub_total, taxes_amount, total) VALUES( :qty_sold, :sold_price, :comments, :c_id, :p_id, :sub_total, :taxes_amount, :total)";
 
@@ -122,8 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Set parameters
             $p_sold_price = $price;
-            $p_quantity = htmlspecialchars($_POST["quantity"]);
-            $p_comments = htmlspecialchars($_POST["comment"]);
+            $p_quantity = $order->getQuantity_sold();
+            $p_comments = $order->getComment();
             $p_p_id = $prod_id;
             $p_c_id = $_SESSION["id"];
             $p_subtotal = $subtotal;
@@ -145,5 +152,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     unset($connection);
 }
-buyForm();
+
+buyForm($quantity,$comment,$prod_id,$quantity_err,$comment_err);
 ?>
