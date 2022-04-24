@@ -99,11 +99,11 @@ function buyForm($quantity, $comment, $prod_id, $quantity_err, $comment_err) {
 
             <span class="error">*  <?php echo $quantity_err ?></span>
             <label>Quantity</label>
-            <input type="text" name="quantity"  value="<?php //echo $quantity;       ?>">
+            <input type="text" name="quantity"  value="<?php //echo $quantity;        ?>">
             <br><br>
             <span class="error"><?php echo $comment_err ?></span>
             <label>Comment</label>
-            <input type="text" name="comment" value="<?php // echo $comment;       ?> ">
+            <input type="text" name="comment" value="<?php // echo $comment;        ?> ">
             <div class="">
                 <input type="submit" style="background-color: #1d5962; margin-bottom: 2px;"  value="Buy">
             </div>
@@ -149,81 +149,81 @@ function imageShuffle() {
             <div>
                 <a target="_blank" href="https://eightouncecoffee.ca/">
                     <img class="<?php
-    // if the index of the array is 0 then apply different css to enlarge the image
-    if ($myArray[0] == PICTURE_COFFEE1) {
+                    // if the index of the array is 0 then apply different css to enlarge the image
+                    if ($myArray[0] == PICTURE_COFFEE1) {
 
-        echo "bigImage";
-    } else {
+                        echo "bigImage";
+                    } else {
 
-        echo "smallImage";
-    }
-    ?>" src="<?php echo $myArray[0]; ?>" alt="Advertisement"> </a>
+                        echo "smallImage";
+                    }
+                    ?>" src="<?php echo $myArray[0]; ?>" alt="Advertisement"> </a>
             </div>
 
     </section>
-                    <?php
-                     }
+    <?php
+}
 
-                     function checkLogin() {
-                         global $connection;
-                         if (isset($_SESSION["id"])) {
-                             global $connection;
-                             // Call procedure to get all details of a customer.
-                             $sql = "CALL customer_select(:id)";
-                             //$sql = "SELECT * FROM customers WHERE customer_id = :id";
-                             if ($stmt = $connection->prepare($sql)) {
-                                 // Bind variables to the prepared statement as parameters
-                                 $stmt->bindParam(":id", $param_id);
+function checkLogin() {
+    global $connection;
+    if (isset($_SESSION["id"])) {
+        global $connection;
+        // Call procedure to get all details of a customer.
+        $sql = "CALL customer_select(:id)";
+        //$sql = "SELECT * FROM customers WHERE customer_id = :id";
+        if ($stmt = $connection->prepare($sql)) {
+            // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":id", $param_id);
 
-                                 // Set parameters
-                                 $param_id = $_SESSION["id"];
+            // Set parameters
+            $param_id = $_SESSION["id"];
 
-                                 // Attempt to execute the prepared statement
-                                 if ($stmt->execute()) {
-                                     if ($stmt->rowCount() == 1) {
-                                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                                         /* Fetch result row as an associative array. Since the result set
-                                           contains only one row, we don't need to use while loop */
+            // Attempt to execute the prepared statement
+            if ($stmt->execute()) {
+                if ($stmt->rowCount() == 1) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    /* Fetch result row as an associative array. Since the result set
+                      contains only one row, we don't need to use while loop */
 
-                                         // Retrieve individual field values ot display at the top.
-                                         ?>
-                    <div class="avatar-right" style="float: right">
-                    <?php
-                    echo "<img class='avatar' src='data:image; base64," .
-                    base64_encode($row["avatar"]) . "'>";
-
-                    $firstname = $row["firstname"];
-                    $lastname = $row["lastname"];
-
-                    echo "  {$firstname} {$lastname} ";
-
-                    echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='logout.php'>Logout!</a>";
+                    // Retrieve individual field values ot display at the top.
                     ?>
+                    <div class="avatar-right" style="float: right">
+                        <?php
+                        echo "<img class='avatar' src='data:image; base64," .
+                        base64_encode($row["avatar"]) . "'>";
+
+                        $firstname = $row["firstname"];
+                        $lastname = $row["lastname"];
+
+                        echo "  {$firstname} {$lastname} ";
+
+                        echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='logout.php'>Logout!</a>";
+                        ?>
                     </div>
 
-                        <?php
-                    }
-//                   
+                    <?php
                 }
+//                   
             }
-        } else {
-            echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='login.php'>Please login!</a>";
         }
+    } else {
+        echo "<a class='main-nav-link nav-cta' style='float: right; margin: 5px;' href='login.php'>Please login!</a>";
     }
+}
 
 // Function ot generate login html
-    function loginHTML($username, $password, $avatar, $lastname, $username_err, $password_err, $login_err) {
-        ?>
+function loginHTML($username, $password, $avatar, $lastname, $username_err, $password_err, $login_err) {
+    ?>
 
     <div class="Container-form" style="background-color: #39b2c4;">
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
 
-    <?php
-    if (!empty($login_err)) {
-        echo '<div class="">' . $login_err . '</div>';
-    }
-    ?>
+        <?php
+        if (!empty($login_err)) {
+            echo '<div class="">' . $login_err . '</div>';
+        }
+        ?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
             <span class="error">*  <?php echo $username_err ?></span>
@@ -260,25 +260,25 @@ function PageTop($pageTitle) {
             <title><?php echo $pageTitle; ?></title>
 
             <link rel="stylesheet" type="text/css" href="<?php
-    //for changing the style sheet path by checking the current page and command parameters.
-    if (($pageTitle == "orders page") && (isset($_GET['command']) && $_GET['command'] == "print")) {
-        echo PRINT_CSS;
-    } else {
-        echo FILE_CSS;
-    }
-    ?>">
+            //for changing the style sheet path by checking the current page and command parameters.
+            if (($pageTitle == "orders page") && (isset($_GET['command']) && $_GET['command'] == "print")) {
+                echo PRINT_CSS;
+            } else {
+                echo FILE_CSS;
+            }
+            ?>">
 
 
         </head>
 
         <body>
 
-    <?php
-}
+            <?php
+        }
 
 // Creating function for navigation bar for multiple use on every page.
-function navigationMenu() {
-    ?>
+        function navigationMenu() {
+            ?>
             <header class="header">
                 <a href=" <?php echo FILE_INDEX ?>">
                     <img class="logo" alt="Aafrin Cafe logo" src=" <?php echo LOGO_IMAGE ?>">
@@ -295,12 +295,12 @@ function navigationMenu() {
                     </ul>
                 </nav>
             </header>
-    <?php
-}
+            <?php
+        }
 
 // Creating page bottom function.
-function PageBottom() {
-    ?>
+        function PageBottom() {
+            ?>
 
             <p class="bottom heading-secondary">Copyright © <?php echo date("Y"); ?>. By Aafrin Sayani (2030150) CAFÉ Inc. All rights reserved.
             </p>
@@ -387,7 +387,7 @@ function signUpHTML($username_err, $password_err, $firstname_err, $lastname_err,
                             <label>Picture</label>
                             <span class="error">*  <?php echo $avatar_err ?></span>
                             <br>
-                            <input type="file" name="avatar" value="<?php // echo $avatar;  ?>">
+                            <input type="file" name="avatar" value="<?php // echo $avatar;   ?>">
                             <br><br>
 
 
@@ -488,7 +488,7 @@ function account($username_err, $password_err, $username, $avatar, $password, $f
                             <label>Picture</label>
                             <span class="error">*  <?php echo $avatar_err ?></span>
                             <br>
-                            <input type="file" name="avatar" value="<?php // echo $avatar;   ?>">
+                            <input type="file" name="avatar" value="<?php // echo $avatar;    ?>">
                             <br><br>
                             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                             <input type="submit" style="background-color: #1d5962; margin: 5px;"" value="Submit">
@@ -504,6 +504,16 @@ function account($username_err, $password_err, $username, $avatar, $password, $f
     </section>
     <?php
 }
+//
+//function https() {
+//    if ($_SERVER["HTTPS"] != "on") {
+//        header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+//        exit();
+//    }
+//}
+//
+//https();
+
 //
 //define("DEBUG_MODE", false); #true means I am debugging (development)
 //#false means I put  my website in the internet (production)
