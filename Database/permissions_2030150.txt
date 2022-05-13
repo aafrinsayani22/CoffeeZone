@@ -1,0 +1,19 @@
+GRANT USAGE ON *.* TO `user-2030150`@`localhost` IDENTIFIED BY PASSWORD '*A4B6157319038724E3560894F7F932C8886EBFCF'
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`customer_all` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`customer_select` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`customer_insert` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`customer_update` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`customer_delete` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`login` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`order_all` TO `user-2030150`@`localhost`
+GRANT SELECT, SHOW VIEW ON `database_2030150`.`orders_view` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`order_select` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`order_insert` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`order_update` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`order_delete` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`product_all` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`product_insert` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`product_select` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`product_update` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`product_delete` TO `user-2030150`@`localhost`
+GRANT EXECUTE ON PROCEDURE `database_2030150`.`orders_search` TO `user-2030150`@`localhost`
